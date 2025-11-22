@@ -30,12 +30,12 @@ class ConexaoDB:
                                      future=True
                                     )
 
-        @contextmanager
-        def session(self) -> Session:
-            """Context manager seguro para abrir e fechar sessão."""
+    @contextmanager
+    def session(self) -> Session:
+        """Context manager seguro para abrir e fechar sessão."""
 
-            db: Session = self._session()
-            try:
-                yield db
-            finally:
-                db.close()
+        db: Session = self._session()
+        try:
+            yield db
+        finally:
+            db.close()
