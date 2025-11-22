@@ -1,0 +1,23 @@
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Mapped
+from sqlalchemy import String, Integer, Date
+from datetime import date
+
+from typing import Optional
+from base import Base
+
+
+class Anime(Base):
+    __tablename__ = "tb_anime"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nome: Mapped[str] = mapped_column(String(50))
+    data_lancamento: Mapped[date] = mapped_column(Date)
+    descricao: Mapped[Optional[str]]
+
+    def __repr__(self):
+        return (
+            f"TB_ANIME(id={self.id}, "
+            f"nome={self.nome}"
+            f"data_lancamento={self.data_lancamento}"
+            f"descricao={self.descricao})"
+        )
