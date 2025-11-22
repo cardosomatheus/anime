@@ -9,7 +9,7 @@ ENV POSTGRES_PASSWORD=MYPASSWORD123
 ENV POSTGRES_USER=SYSPOSTGRES
 ENV POSTGRES_DB=DATABASE_ANIME
 
-COPY /database/scripts_iniciais/ /docker-entrypoint-initdb.d/
+COPY /docker_database/scripts_iniciais/ /docker-entrypoint-initdb.d/
 
 VOLUME /animes/database/DB_VOLUME
 
