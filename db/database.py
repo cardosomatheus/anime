@@ -3,7 +3,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 
-from contextlib import contextmanager
 from dotenv import load_dotenv
 import os
 
@@ -30,12 +29,5 @@ class ConexaoDB:
                                      future=True
                                     )
 
-    @contextmanager
     def session(self) -> Session:
-        """Context manager seguro para abrir e fechar sessão."""
-
-        db: Session = self._session()
-        try:
-            yield db
-        finally:
-            db.close()
+        return self._session()
