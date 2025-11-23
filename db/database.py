@@ -26,7 +26,7 @@ class ConexaoDB:
         self._session = sessionmaker(
                                      bind=self._engine,
                                      autocommit=False,
-                                     autoflush=False,
+                                     autoflush=True,
                                      future=True
                                     )
 
