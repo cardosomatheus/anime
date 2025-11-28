@@ -2,11 +2,11 @@ from sqlalchemy import select, delete, update
 from sqlalchemy.orm import Session
 from datetime import date
 
-from interface.anime_interface import Ianime
+from interface.anime_interface import IanimeRepository
 from ..model.anime_model import AnimeModel
 
 
-class RepositoryAnime(Ianime):
+class RepositoryAnime(IanimeRepository):
     def __init__(self, session: Session) -> None:
         self.session = session
 

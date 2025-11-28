@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Ianime(ABC):
+class IanimeRepository(ABC):
 
     @abstractmethod
     def cria_anime(self, id: int) -> list:
