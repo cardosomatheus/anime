@@ -17,7 +17,7 @@ class AnimeModel(Base):
     def __repr__(self):
         return (
             f"TB_ANIME(id={self.id}, "
-            f"nome={self.nome}"
-            f"data_lancamento={self.data_lancamento}"
+            f"nome={self.nome} "
+            f"data_lancamento={self.data_lancamento} "
             f"descricao={self.descricao})"
         )

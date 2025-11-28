@@ -15,11 +15,10 @@ class RepositoryAnime(Ianime):
                    data_lancamento: date,
                    descricao: str,
                    ) -> AnimeModel:
-        """
-        Args:
-            nome (str): Nome do anime
-            data_lancamento (date): data de lancamento
-            descricao (str): Descricao do anime
+        """Args:
+           nome (str): Nome do anime
+           data_lancamento (date): data de lancamento
+           descricao (str): Descricao do anime
         Raises:
             Exception: Erro no cadastro
         Returns:
@@ -45,97 +44,44 @@ class RepositoryAnime(Ianime):
 
         return new_anime_model
 
-    def busca_anime_by_id(self, id: int) -> list:
+    def busca_anime_by_id(self, id: int) -> AnimeModel:
+        """ Busca o anime baseado no ID
+        Args: id (int): Buscaremos o ANIME pelo ID
+        str: Retornamos o AnimeModel do anime identificado ou None.
         """
-        Args:
-            id (int): Buscaremos o ANIME pelo ID
-        Raises:
-            Exception: Se o ID não existir, retornamos None
-
-        Returns:
-            str: Retornamos o nome do Anime
-        """
-        if id is not None and not isinstance(id, int):
-            raise Exception('ID deve ser uma valor inteiro!!')
-
         with self.session as conn:
-            try:
-                query = select(AnimeModel.nome).where(AnimeModel.id == id)
-                return conn.execute(query).first()
-
-            except TypeError:
-                return [None]
+            query = select(AnimeModel).where(AnimeModel.id == id)
+            return conn.execute(query).first()
 
     def busca_all_animes(self) -> list:
-        """
-        Returns:
-            list: Retornamos em formato de lista todos os animes.
+        """ Buscamos todos os animes da base.
+            Returns: Todos os animes da base
         """
         with self.session as conn:
-            try:
-                query = select(
-                               AnimeModel.id,
-                               AnimeModel.nome,
-                               AnimeModel.data_lancamento,
-                               AnimeModel.descricao
-                            )
+            query = select(AnimeModel)
+            return conn.execute(query).all()
 
-                return conn.execute(query).all()
-            except Exception:
-                return []
-
-    def deleta_anime(self, id: int) -> bool:
-        """Faz a deleção do anime pelo ID
-        Args:
-            id (int): id do anime
-        Raises:
-            Exception: ID deve ser inteiro
-            Exception: ID não deve ser Nulo
+    def deleta_anime(self, id: int) -> None:
+        """ Deleta o anime informado pelo ID
+            Args: id (int): ID do anime.
         """
-        if not isinstance(id, int):
-            raise Exception('ID deve ser uma valor inteiro!!')
-
-        if id is None:
-            raise Exception('Passe o ID (valor Inteiro)')
-
         with self.session as conn:
-            try:
-                query = delete(AnimeModel).where(AnimeModel.id == id)
-                conn.execute(query)
-                conn.commit()
-                return True
-            except Exception as error:
-                print(error)
-                return False
+            query = delete(AnimeModel).where(AnimeModel.id == id)
+            conn.execute(query)
+            conn.commit()
 
     def atualiza_anime(self,
-                       id: int,
-                       dict_Anime_model: dict) -> AnimeModel:
-        """Atualizamos campos contidos no model de anime
-        Args:
-            id (int): id do anime
-        Raises:
-            Exception: ID deve ser inteiro
-        Returns:
-            AnimeModel: _description_
+                       dict_Anime_model: dict) -> None:
+        """ Atualiza O anime informado
+            Args: dict_Anime_model (dict): dict com novos valores
         """
-        if not isinstance(id, int):
-            raise Exception('ID deve ser uma valor inteiro!!')
-
-        dict_atualizar_campos = {
-            key: value for key, value in dict_Anime_model.items()
-        }
-
         with self.session as conn:
-            try:
-                query = update(AnimeModel)\
-                        .where(AnimeModel.id == id)\
-                        .values(**dict_atualizar_campos)
+            query = update(AnimeModel)\
+                    .where(AnimeModel.id == dict_Anime_model.get('id'))\
+                    .values(**dict_Anime_model)
 
-                conn.execute(query)
-                conn.commit()
-            except Exception as error:
-                print(error)
+            conn.execute(query)
+            conn.commit()
 
 
 if __name__ == "__main__":
@@ -146,9 +92,9 @@ if __name__ == "__main__":
     dddd = {'nome': 'Leviathan', 'idade': '19'}
 
     print(myrepo.busca_anime_by_id(13))
-    print(myrepo.busca_all_animes())
-    myrepo.atualiza_anime(13, dddd)
-    myrepo.deleta_anime(11)
+#    print(myrepo.busca_all_animes())
+#    myrepo.atualiza_anime(13, dddd)
+#    myrepo.deleta_anime(11)
 
 #    myrepo.cria_anime(
 #        nome='Leviathan31',
