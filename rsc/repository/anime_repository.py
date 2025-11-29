@@ -91,7 +91,7 @@ if __name__ == "__main__":
     myrepo = RepositoryAnime(con_db)
     dddd = {'nome': 'Leviathan', 'idade': '19'}
 
-    print(myrepo.busca_anime_by_id(13))
+    print(myrepo.busca_anime_by_id(19))
 #    print(myrepo.busca_all_animes())
 #    myrepo.atualiza_anime(13, dddd)
 #    myrepo.deleta_anime(11)
