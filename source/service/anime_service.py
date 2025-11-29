@@ -1,6 +1,7 @@
 from ..repository.anime_repository import RepositoryAnime
 from datetime import date
 
+
 class ServiceAnime:
     def __init__(self, repository_anime: RepositoryAnime) -> None:
         self.repository_anime = repository_anime
