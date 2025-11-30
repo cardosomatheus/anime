@@ -4,7 +4,7 @@ from sqlalchemy import String
 from typing import Optional
 
 
-from rsc.model.base_model import Base
+from source.model.base_model import Base
 
 
 class Categoria(Base):

@@ -1,4 +1,4 @@
-from rsc.repository.anime_repository import RepositoryAnime
+from source.repository.anime_repository import RepositoryAnime
 from db.database import ConexaoDB
 
 myrepo = RepositoryAnime()

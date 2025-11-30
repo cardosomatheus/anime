@@ -82,26 +82,3 @@ class RepositoryAnime(IanimeRepository):
 
             conn.execute(query)
             conn.commit()
-
-
-if __name__ == "__main__":
-    from db.database import ConexaoDB
-
-    con_db = ConexaoDB().session()
-    myrepo = RepositoryAnime(con_db)
-    dddd = {'nome': 'Leviathan', 'idade': '19'}
-
-    print(myrepo.busca_anime_by_id(19))
-#    print(myrepo.busca_all_animes())
-#    myrepo.atualiza_anime(13, dddd)
-#    myrepo.deleta_anime(11)
-
-#    myrepo.cria_anime(
-#        nome='Leviathan31',
-#        data_lancamento=date(day=10, month=7, year=2025),
-#        descricao="""É uma série steampunk adaptada do livro de Scott
-#        Westerfeld. A história se passa num universo alternativo para 1914,
-#        onde existem criaturas vivas (como navios dirigidos) e máquinas
-#        biológicas. Dois protagonistas — um príncipe (Aleksandar) e uma
-#        garota disfarçada de menino (Deryn)"""
-#    )

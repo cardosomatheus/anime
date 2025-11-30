@@ -1,5 +1,6 @@
 from ..repository.anime_repository import RepositoryAnime
 from datetime import date
+from ..model.anime_model import AnimeModel
 
 
 class ServiceAnime:
@@ -7,10 +8,20 @@ class ServiceAnime:
         self.repository_anime = repository_anime
 
     def __valida_existencia_anime(self, id: int) -> None:
+        """ Confirma a existencia do anime pelo ID
+        Args: id (int): ID do anime
+        Raises: Exception: Anime não existe
+        """
         if self.repository_anime.busca_anime_by_id(id=id) is None:
             raise Exception('Anime não encontrado.')
 
     def __valida_id_nulo_inteiro(self, id: int) -> None:
+        """ Valida se o ID é nulo ou não é inteiro.
+        Args: id (int): ID do anime
+        Raises:
+            ValueError: ID não Nulo?
+            Exception: ID não inteir?
+        """
         if id is None:
             raise ValueError("ID não informado.")
 
@@ -18,14 +29,45 @@ class ServiceAnime:
             raise Exception('ID Precisa ser um numero inteiro!!')
 
     def __identifica_campos_anime(self, dict_columns: dict) -> dict:
+        """Filtra apenas Chaves(colnas) contidos na AnimeModel.
+        Args: dict_columns (dict): Coluna: novo valor
+        Returns: Apenas campos contidos na AnimeModel.
+        """
         return {
             key: value for key, value in dict_columns.items()
+            if key in AnimeModel.__table__.columns.keys()
         }
 
-    def __valida_criacao_anime(self, dict_anime: dict):
-        pass
+    def __valida_criacao_anime(self,
+                               nome: str,
+                               data_lancamento: date,
+                               descricao: str) -> None:
+        """Validações simples para criar um anime.
+        Args:
+            nome (str): nome
+            data_lancamento (date): data de lançamento
+            descricao (str): descricao
+        Raises:
+            Exception: data_lancamento é um date?
+            Exception: nome é um str?
+            Exception: descricao é um str?
+        """
+
+        if not isinstance(data_lancamento, date):
+            raise Exception('A data incorreta.')
+
+        if not isinstance(nome, str):
+            raise Exception('O nome deve ser string.')
+
+        if descricao is not None and not isinstance(descricao, str):
+            raise Exception('O nome deve ser string.')
 
     def busca_anime_by_id(self, id: int) -> dict:
+        """ Retorna a consulta do repository
+        Args:  id (int): ID do anime
+        Returns: dict: sucess and message
+        """
+
         try:
             self.__valida_id_nulo_inteiro(id=id)
             self.__valida_existencia_anime(id=id)
@@ -36,6 +78,10 @@ class ServiceAnime:
             return {"sucess": False, "message": str(error)}
 
     def busca_all_animes(self) -> dict:
+        """ Retorna a consulta do repository
+        Args:  id (int): ID do anime
+        Returns: dict: sucess and message
+        """
         try:
             all_anime_model = self.repository_anime.busca_all_animes()
             return {"sucess": True, "type": "Anime", "Info": all_anime_model}
@@ -43,6 +89,11 @@ class ServiceAnime:
             return {"sucess": False, "message": str(error)}
 
     def deleta_anime(self, id: int) -> dict:
+        """ Deleta anime pelo repository
+        Args:  id (int): ID do anime
+        Returns: dict: sucess and message
+        """
+
         try:
             self.__valida_id_nulo_inteiro(id=id)
             self.__valida_existencia_anime(id=id)
@@ -53,6 +104,10 @@ class ServiceAnime:
 
     def atualiza_anime(self,
                        dict_Anime_model: dict) -> dict:
+        """ Atualiza anime pelo repository
+        Args:  id (int): ID do anime
+        Returns: dict: sucess and message
+        """
         try:
             dict_Anime_model = self.__identifica_campos_anime(
                 dict_columns=dict_Anime_model
@@ -71,9 +126,35 @@ class ServiceAnime:
     def cria_anime(self,
                    nome: str,
                    data_lancamento: date,
-                   descricao: str,
-                   ) -> dict:
-        pass
+                   descricao: str) -> dict:
+        """Cria novo anime pelo repository
+        Args:
+            nome (str): nome
+            data_lancamento (date): data lançamento
+            descricao (str): descricao
+        Returns: dict: sucess and message
+        """
+        try:
+            self.__valida_criacao_anime(
+                nome=nome,
+                data_lancamento=data_lancamento,
+                descricao=descricao
+            )
+
+            new_anime = self.repository_anime.cria_anime(
+                nome=nome,
+                data_lancamento=data_lancamento,
+                descricao=descricao
+                )
+
+            return {
+                    "sucess": True,
+                    "type": "Anime",
+                    "Info": f"Anime {new_anime.nome} cadastrado com sucesso."
+                    }
+        except Exception as error:
+            return {"sucess": False, "message": str(error)}
+
 
 if __name__ == "__main__":
     from db.database import ConexaoDB
@@ -82,8 +163,21 @@ if __name__ == "__main__":
     myrepo = RepositoryAnime(con_db)
     service = ServiceAnime(repository_anime=myrepo)
 
-    print(service.busca_anime_by_id(id=1))
+    # print(service.busca_anime_by_id(id=1))
+
+    # print(service.cria_anime(
+    #    nome='Leviathan61',
+    #    data_lancamento=date(day=10, month=7, year=2025),
+    #    descricao="""É uma série steampunk adaptada do livro de Scott
+    #    Westerfeld. A história se passa num universo alternativo para 1914,
+    #    onde existem criaturas vivas (como navios dirigidos) e máquinas
+    #    biológicas. Dois protagonistas — um príncipe (Aleksandar) e uma
+    #    garota disfarçada de menino (Deryn)"""
+    # )
+    # )
     # print(myrepo.busca_all_animes())
     # service.deleta_anime(10)
-    # service.atualiza_anime({'id': 1, 'nome': 'Fullmetal Alchemist'})
+    # print(service.atualiza_anime({'id': 1,
+    #                               'nome': 'Fullmetal Alchemist',
+    #                               'i': 39}))
     # print(myrepo.busca_all_animes())
