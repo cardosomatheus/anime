@@ -72,7 +72,9 @@ class ServiceAnime:
             self.__valida_id_nulo_inteiro(id=id)
             self.__valida_existencia_anime(id=id)
             anime_model = self.repository_anime.busca_anime_by_id(id=id)
-            return {"sucess": True, "type": "Anime", "Info": anime_model}
+            return {"sucess": True,
+                    "type": "Anime",
+                    "Info": anime_model.to_dict()}
 
         except Exception as error:
             return {"sucess": False, "message": str(error)}
@@ -84,7 +86,12 @@ class ServiceAnime:
         """
         try:
             all_anime_model = self.repository_anime.busca_all_animes()
-            return {"sucess": True, "type": "Anime", "Info": all_anime_model}
+            return {
+                "sucess": True,
+                "type": "Anime",
+                "Info": all_anime_model
+            }
+            # [anime.to_dict() for anime in all_anime_model]
         except Exception as error:
             return {"sucess": False, "message": str(error)}
 
@@ -175,7 +182,7 @@ if __name__ == "__main__":
     #    garota disfarçada de menino (Deryn)"""
     # )
     # )
-    # print(myrepo.busca_all_animes())
+    print(service.busca_anime_by_id(1))
     # service.deleta_anime(10)
     # print(service.atualiza_anime({'id': 1,
     #                               'nome': 'Fullmetal Alchemist',

@@ -21,3 +21,11 @@ class AnimeModel(Base):
             f"data_lancamento={self.data_lancamento} "
             f"descricao={self.descricao})"
         )
+
+    def to_dict(self) -> dict:
+        return {
+          "id": self.id,
+          "nome": self.nome,
+          "data_lancamento": self.data_lancamento,
+          "descricao": self.descricao
+        }
