@@ -7,6 +7,10 @@ class ServiceAnime:
     def __init__(self, repository_anime: RepositoryAnime) -> None:
         self.repository_anime = repository_anime
 
+    def __valida_anime_encontrado(self, anime: dict) -> None:
+        if anime is None:
+            raise Exception('Anime não identificado.')  
+
     def __valida_existencia_anime(self, id: int) -> None:
         """ Confirma a existencia do anime pelo ID
         Args: id (int): ID do anime
@@ -70,13 +74,14 @@ class ServiceAnime:
 
         try:
             self.__valida_id_nulo_inteiro(id=id)
-            self.__valida_existencia_anime(id=id)
-            anime_model = self.repository_anime.busca_anime_by_id(id=id)
+            byanime = self.repository_anime.busca_anime_by_id(id=id)
+            self.__valida_anime_encontrado(anime=byanime)          
             return {"sucess": True,
                     "type": "Anime",
-                    "Info": anime_model.to_dict()}
+                    "Info": byanime.to_dict()}
 
         except Exception as error:
+            print(error)
             return {"sucess": False, "message": str(error)}
 
     def busca_all_animes(self) -> dict:

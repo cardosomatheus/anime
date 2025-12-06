@@ -44,14 +44,18 @@ class RepositoryAnime(IanimeRepository):
 
         return new_anime_model
 
-    def busca_anime_by_id(self, id: int) -> AnimeModel:
+    def busca_anime_by_id(self, id: int) -> dict:
         """ Busca o anime baseado no ID
         Args: id (int): Buscaremos o ANIME pelo ID
-        str: Retornamos o AnimeModel do anime identificado ou None.
+        dict: Retornamos o DICT do anime identificado ou None.
         """
-        with self.session as conn:
-            query = select(AnimeModel).where(AnimeModel.id == id)
-            return conn.execute(query).scalar_one()
+        try:
+            with self.session as conn:
+                query = select(AnimeModel).where(AnimeModel.id == id)
+                return conn.execute(query).scalar_one()
+        except Exception as error:
+            print(error)
+            print(f'error in repositoory: {error}')
 
     def busca_all_animes(self) -> list[AnimeModel]:
         """ Buscamos todos os animes da base.
