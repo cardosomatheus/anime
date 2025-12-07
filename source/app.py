@@ -12,5 +12,3 @@ app.include_router(
 @app.get("/")
 async def root():
     return {"message": "Hello Bigger!"}
-
-
