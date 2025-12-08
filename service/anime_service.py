@@ -1,7 +1,6 @@
-from ..repository.anime_repository import RepositoryAnime
+from anime.repository.anime_repository import RepositoryAnime
+from anime.model.anime_model import AnimeModel
 from datetime import date
-from ..model.anime_model import AnimeModel
-
 
 class ServiceAnime:
     def __init__(self, repository_anime: RepositoryAnime) -> None:
@@ -169,7 +168,7 @@ class ServiceAnime:
 
 
 if __name__ == "__main__":
-    from db.database import ConexaoDB
+    from anime.db.database import ConexaoDB
 
     con_db = ConexaoDB().session()
     myrepo = RepositoryAnime(con_db)

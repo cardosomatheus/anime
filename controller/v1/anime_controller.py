@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
-from source.service.anime_service import ServiceAnime
-from source.repository.anime_repository import RepositoryAnime
-from db.database import ConexaoDB
+from anime.service.anime_service import ServiceAnime
+from anime.repository.anime_repository import RepositoryAnime
+from anime.db.database import ConexaoDB
 
 
 router = APIRouter(prefix="/v1/animes", tags=["Animes"])
 
 
 def myservice() -> ServiceAnime:
-    conn = ConexaoDB()
-    repo = RepositoryAnime(conn)
+    session = ConexaoDB().mysession()
+    repo = RepositoryAnime(session=session)
     service = ServiceAnime(repository_anime=repo)
     return service
 
@@ -30,4 +30,10 @@ async def litar_anime(id_anime: int,
         print(f'Error ao tenar buscar o anime pelo ID {id_anime}!!\n')
         print(error)
 
+if __name__ == '__main__':
+    conn = ConexaoDB().mysession()
+    print(type(conn))
+    repo = RepositoryAnime(conn)
+    service = ServiceAnime(repository_anime=repo)
 
+    print(service.busca_anime_by_id(1))

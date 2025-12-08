@@ -4,7 +4,7 @@ from sqlalchemy import String, Integer, Date
 from datetime import date
 
 from typing import Optional
-from source.model.base_model import Base
+from anime.model.base_model import Base
 
 
 class AnimeModel(Base):

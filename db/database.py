@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 
@@ -8,10 +7,10 @@ import os
 
 
 class ConexaoDB:
+    load_dotenv()
 
-    def __init__(self):
-        load_dotenv()
-        self._engine = create_engine(
+    def mysession(self) -> Session:
+        engine = create_engine(
             URL.create(
                 "postgresql+psycopg2",
                 username=os.getenv("POSTGRES_USER"),
@@ -22,12 +21,5 @@ class ConexaoDB:
             ),
             future=True,
         )
-        self._session = sessionmaker(
-                                     bind=self._engine,
-                                     autocommit=False,
-                                     autoflush=True,
-                                     future=True
-                                    )
 
-    def session(self) -> Session:
-        return self._session()
+        return Session(engine)
