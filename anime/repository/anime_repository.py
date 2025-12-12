@@ -15,15 +15,6 @@ class RepositoryAnime(IanimeRepository):
                    data_lancamento: date,
                    descricao: str,
                    ) -> AnimeModel:
-        """Args:
-           nome (str): Nome do anime
-           data_lancamento (date): data de lancamento
-           descricao (str): Descricao do anime
-        Raises:
-            Exception: Erro no cadastro
-        Returns:
-            AnimeModel: Retorna o model da tabela.
-        """
         new_anime_model = AnimeModel(nome=nome,
                                      data_lancamento=data_lancamento,
                                      descricao=descricao)
@@ -34,16 +25,16 @@ class RepositoryAnime(IanimeRepository):
                 mysession.commit()
                 mysession.refresh(new_anime_model)
         except Exception as error:
-            print()
-            print(f'Erro ao salvar o Anime: {nome}!')
             print(error)
         finally:
             return new_anime_model
 
-    def busca_anime_by_id(self, id: int) -> dict:
-        """ Busca o anime baseado no ID
-        Args: id (int): Buscaremos o ANIME pelo ID
-        dict: Retornamos o DICT do anime identificado ou None.
+    def busca_anime_by_id(self, id: int) -> AnimeModel:
+        """ busca Anime pelo id
+        Args:
+            id (int): ID do anime
+        Returns:
+            AnimeModel: AnimeModel()
         """
         try:
             with self.session as mysession:
@@ -51,15 +42,18 @@ class RepositoryAnime(IanimeRepository):
                 return mysession.execute(query).scalar_one()
         except Exception as error:
             print(error)
-            print(f'error in repositoory: {error}')
 
     def busca_all_animes(self) -> list[AnimeModel]:
-        """ Buscamos todos os animes da base.
-            Returns: Todos os animes da base
+        """ busca todos os Animes
+        Returns:
+            AnimeModel: list(AnimeModel())
         """
-        with self.session as mysession:
-            query = select(AnimeModel)
-            return mysession.execute(query).all()
+        try:
+            with self.session as mysession:
+                query = select(AnimeModel)
+                return mysession.execute(query).scalars().all()
+        except Exception as error:
+            print(error)
 
     def deleta_anime(self, id: int) -> None:
         """ Deleta o anime informado pelo ID
@@ -88,9 +82,12 @@ if __name__ == "__main__":
     from anime.db.database import ConexaoDB
 
     sessao = ConexaoDB().mysession()
-    print(type(sessao))
-#    with sessao as mysession:
-#        print(mysession.execute(text('select now()')).first())
+    repo = RepositoryAnime(session=sessao)
+    
+    print(repo.busca_anime_by_id(1))
+    print(repo.busca_all_animes())
+        
+        
 #    with con_db as conexao:
 #        conexao.execute(text('select now()')).first()
     # myrepo = RepositoryAnime(con_db)

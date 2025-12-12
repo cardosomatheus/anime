@@ -2,6 +2,7 @@ from anime.repository.anime_repository import RepositoryAnime
 from anime.model.anime_model import AnimeModel
 from datetime import date
 
+
 class ServiceAnime:
     def __init__(self, repository_anime: RepositoryAnime) -> None:
         self.repository_anime = repository_anime
@@ -90,13 +91,17 @@ class ServiceAnime:
         """
         try:
             all_anime_model = self.repository_anime.busca_all_animes()
+            all_anime_model = [
+                anime.to_dict()
+                for anime in all_anime_model
+            ]
             return {
                 "sucess": True,
                 "type": "Anime",
                 "Info": all_anime_model
             }
-            # [anime.to_dict() for anime in all_anime_model]
         except Exception as error:
+            print(error)
             return {"sucess": False, "message": str(error)}
 
     def deleta_anime(self, id: int) -> dict:
@@ -170,12 +175,12 @@ class ServiceAnime:
 if __name__ == "__main__":
     from anime.db.database import ConexaoDB
 
-    con_db = ConexaoDB().session()
+    con_db = ConexaoDB().mysession()
     myrepo = RepositoryAnime(con_db)
     service = ServiceAnime(repository_anime=myrepo)
 
     # print(service.busca_anime_by_id(id=1))
-
+    print(service.busca_all_animes())
     # print(service.cria_anime(
     #    nome='Leviathan61',
     #    data_lancamento=date(day=10, month=7, year=2025),
@@ -186,7 +191,7 @@ if __name__ == "__main__":
     #    garota disfarçada de menino (Deryn)"""
     # )
     # )
-    print(service.busca_anime_by_id(1))
+    #print(service.busca_anime_by_id(1))
     # service.deleta_anime(10)
     # print(service.atualiza_anime({'id': 1,
     #                               'nome': 'Fullmetal Alchemist',

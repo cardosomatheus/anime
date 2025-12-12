@@ -15,20 +15,25 @@ def myservice() -> ServiceAnime:
 
 
 @router.get("/")
-async def root() -> dict:
-    return {"message": "Hello word2"}
+async def root(service: ServiceAnime = Depends(myservice)) -> dict:
+    # Todos os animes em formato de dicionario
+    try:
+        response = service.busca_all_animes()
+        return response
+    except Exception as error:
+        print(error)
 
 
 @router.get("/id={id_anime}")
 async def litar_anime(id_anime: int,
                       service: ServiceAnime = Depends(myservice)) -> dict:
+    # Anime em formato de dicionario
     try:
         response = service.busca_anime_by_id(id=id_anime)
-        print('response controller', response)
         return response
     except Exception as error:
-        print(f'Error ao tenar buscar o anime pelo ID {id_anime}!!\n')
         print(error)
+
 
 if __name__ == '__main__':
     conn = ConexaoDB().mysession()
