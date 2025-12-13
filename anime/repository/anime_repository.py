@@ -59,23 +59,30 @@ class RepositoryAnime(IanimeRepository):
         """ Deleta o anime informado pelo ID
             Args: id (int): ID do anime.
         """
-        with self.session as mysession:
-            query = delete(AnimeModel).where(AnimeModel.id == id)
-            mysession.execute(query)
-            mysession.commit()
+        try:
+            with self.session as mysession:
+                query = delete(AnimeModel).where(AnimeModel.id == id)
+                mysession.execute(query)
+                mysession.commit()
+        except Exception as error:
+            print(error)
 
     def atualiza_anime(self,
                        dict_Anime_model: dict) -> None:
         """ Atualiza O anime informado
             Args: dict_Anime_model (dict): dict com novos valores
         """
-        with self.session as conn:
-            query = update(AnimeModel)\
-                    .where(AnimeModel.id == dict_Anime_model.get('id'))\
-                    .values(**dict_Anime_model)
+        try:
+            with self.session as mysession:
+                query = update(AnimeModel)\
+                        .where(AnimeModel.id == dict_Anime_model.get('id'))\
+                        .values(**dict_Anime_model)
 
-            conn.execute(query)
-            conn.commit()
+            mysession.execute(query)
+            mysession.commit()
+
+        except Exception as error:
+            print(error)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ class ServiceAnime:
 
     def __valida_anime_encontrado(self, anime: dict) -> None:
         if anime is None:
-            raise Exception('Anime não identificado.')  
+            raise Exception('Anime não identificado.')
 
     def __valida_existencia_anime(self, id: int) -> None:
         """ Confirma a existencia do anime pelo ID
@@ -33,7 +33,7 @@ class ServiceAnime:
             raise Exception('ID Precisa ser um numero inteiro!!')
 
     def __identifica_campos_anime(self, dict_columns: dict) -> dict:
-        """Filtra apenas Chaves(colnas) contidos na AnimeModel.
+        """ Filtra apenas Chaves(colnas) contidos na AnimeModel.
         Args: dict_columns (dict): Coluna: novo valor
         Returns: Apenas campos contidos na AnimeModel.
         """
@@ -75,7 +75,7 @@ class ServiceAnime:
         try:
             self.__valida_id_nulo_inteiro(id=id)
             byanime = self.repository_anime.busca_anime_by_id(id=id)
-            self.__valida_anime_encontrado(anime=byanime)          
+            self.__valida_anime_encontrado(anime=byanime)         
             return {"sucess": True,
                     "type": "Anime",
                     "Info": byanime.to_dict()}
@@ -91,10 +91,13 @@ class ServiceAnime:
         """
         try:
             all_anime_model = self.repository_anime.busca_all_animes()
+            self.__valida_anime_encontrado(all_anime_model[0])
+
             all_anime_model = [
                 anime.to_dict()
                 for anime in all_anime_model
             ]
+
             return {
                 "sucess": True,
                 "type": "Anime",
@@ -191,7 +194,7 @@ if __name__ == "__main__":
     #    garota disfarçada de menino (Deryn)"""
     # )
     # )
-    #print(service.busca_anime_by_id(1))
+    # print(service.busca_anime_by_id(1))
     # service.deleta_anime(10)
     # print(service.atualiza_anime({'id': 1,
     #                               'nome': 'Fullmetal Alchemist',

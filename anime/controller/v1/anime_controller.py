@@ -15,7 +15,7 @@ def myservice() -> ServiceAnime:
 
 
 @router.get("/")
-async def root(service: ServiceAnime = Depends(myservice)) -> dict:
+async def lista_all_animes(service: ServiceAnime = Depends(myservice)) -> dict:
     # Todos os animes em formato de dicionario
     try:
         response = service.busca_all_animes()
@@ -25,14 +25,41 @@ async def root(service: ServiceAnime = Depends(myservice)) -> dict:
 
 
 @router.get("/id={id_anime}")
-async def litar_anime(id_anime: int,
-                      service: ServiceAnime = Depends(myservice)) -> dict:
+async def listar_anime_by_id(
+    id_anime: int,
+    service: ServiceAnime = Depends(myservice)
+) -> dict:
     # Anime em formato de dicionario
     try:
         response = service.busca_anime_by_id(id=id_anime)
         return response
     except Exception as error:
         print(error)
+
+
+@router.put("/excluir={id_anime}")
+async def excluir_anime_by_id(
+    id_anime: int,
+    service: ServiceAnime = Depends(myservice)
+) -> dict:
+    # Exclusão de anime pelo ID
+    try:
+        response = service.deleta_anime(id=id_anime)
+        return response
+    except Exception as error:
+        print(error)
+
+@router.post("/editar")     # Como receber o Body?
+async def editar_anime_by_id(
+    service: ServiceAnime = Depends(myservice)
+) -> dict:
+    # Edião de anime.
+    try:
+        response = service.atualiza_anime()
+        return response
+    except Exception as error:
+        print(error)
+
 
 
 if __name__ == '__main__':
