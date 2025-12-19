@@ -1,10 +1,10 @@
-from anime.repository.anime_repository import RepositoryAnime
+from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
 from datetime import date
 
 
 class ServiceAnime:
-    def __init__(self, repository_anime: RepositoryAnime) -> None:
+    def __init__(self, repository_anime: IanimeRepository) -> None:
         self.repository_anime = repository_anime
 
     def __valida_anime_encontrado(self, anime: dict) -> None:
@@ -75,11 +75,9 @@ class ServiceAnime:
         try:
             self.__valida_id_nulo_inteiro(id=id)
             byanime = self.repository_anime.busca_anime_by_id(id=id)
-            self.__valida_anime_encontrado(anime=byanime)         
-            return {"sucess": True,
-                    "type": "Anime",
-                    "Info": byanime.to_dict()}
+            self.__valida_anime_encontrado(anime=byanime)
 
+            return byanime
         except Exception as error:
             print(error)
             return {"sucess": False, "message": str(error)}
@@ -92,17 +90,8 @@ class ServiceAnime:
         try:
             all_anime_model = self.repository_anime.busca_all_animes()
             self.__valida_anime_encontrado(all_anime_model[0])
-
-            all_anime_model = [
-                anime.to_dict()
-                for anime in all_anime_model
-            ]
-
-            return {
-                "sucess": True,
-                "type": "Anime",
-                "Info": all_anime_model
-            }
+            return all_anime_model
+            # return dict(all_anime_model)
         except Exception as error:
             print(error)
             return {"sucess": False, "message": str(error)}
@@ -173,30 +162,3 @@ class ServiceAnime:
                     }
         except Exception as error:
             return {"sucess": False, "message": str(error)}
-
-
-if __name__ == "__main__":
-    from anime.db.database import ConexaoDB
-
-    con_db = ConexaoDB().mysession()
-    myrepo = RepositoryAnime(con_db)
-    service = ServiceAnime(repository_anime=myrepo)
-
-    # print(service.busca_anime_by_id(id=1))
-    print(service.busca_all_animes())
-    # print(service.cria_anime(
-    #    nome='Leviathan61',
-    #    data_lancamento=date(day=10, month=7, year=2025),
-    #    descricao="""É uma série steampunk adaptada do livro de Scott
-    #    Westerfeld. A história se passa num universo alternativo para 1914,
-    #    onde existem criaturas vivas (como navios dirigidos) e máquinas
-    #    biológicas. Dois protagonistas — um príncipe (Aleksandar) e uma
-    #    garota disfarçada de menino (Deryn)"""
-    # )
-    # )
-    # print(service.busca_anime_by_id(1))
-    # service.deleta_anime(10)
-    # print(service.atualiza_anime({'id': 1,
-    #                               'nome': 'Fullmetal Alchemist',
-    #                               'i': 39}))
-    # print(myrepo.busca_all_animes())

@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 from datetime import date
+from typing import List
 
 
 class AnimeSchema(BaseModel):
@@ -9,5 +10,5 @@ class AnimeSchema(BaseModel):
     descricao: str
 
 
-class ListAnimeSchema(AnimeSchema):
-    list(AnimeSchema)
+class ListAnimeSchema(RootModel):
+    root: List[AnimeSchema]
