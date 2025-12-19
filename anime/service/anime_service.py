@@ -14,10 +14,7 @@ class ServiceAnime:
             raise Exception('Anime não identificado.')
 
     def __valida_existencia_anime(self, id: int) -> None:
-        """ Confirma a existencia do anime pelo ID
-        Args: id (int): ID do anime
-        Raises: Exception: Anime não existe
-        """
+        """ Confirma a existencia do anime pelo ID """
         if self.repository_anime.busca_anime_by_id(id=id) is None:
             raise Exception('Anime não encontrado.')
 
@@ -30,10 +27,6 @@ class ServiceAnime:
             raise AnimeIdInvalidoError('ID precisa ser um Inteiro')
 
     def __identifica_campos_anime(self, dict_columns: dict) -> dict:
-        """ Filtra apenas Chaves(colnas) contidos na AnimeModel.
-        Args: dict_columns (dict): Coluna: novo valor
-        Returns: Apenas campos contidos na AnimeModel.
-        """
         return {
             key: value for key, value in dict_columns.items()
             if key in AnimeModel.__table__.columns.keys()
