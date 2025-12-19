@@ -20,7 +20,7 @@ async def lista_all_animes(service: ServiceAnime = Depends(myservice)) -> dict:
     # Todos os animes em formato de dicionario
     try:
         response = service.busca_all_animes()
-
+        response.root
         return response
     except Exception as error:
         print(error)
