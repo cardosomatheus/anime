@@ -1,5 +1,7 @@
 from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
+from anime.exception.anime_exception import AnimeIdNuloError
+from anime.exception.anime_exception import AnimeIdInvalidoError
 from datetime import date
 
 
@@ -20,17 +22,12 @@ class ServiceAnime:
             raise Exception('Anime não encontrado.')
 
     def __valida_id_nulo_inteiro(self, id: int) -> None:
-        """ Valida se o ID é nulo ou não é inteiro.
-        Args: id (int): ID do anime
-        Raises:
-            ValueError: ID não Nulo?
-            Exception: ID não inteir?
-        """
+        """ Valida se o ID é nulo ou não é inteiro."""
         if id is None:
-            raise ValueError("ID não informado.")
+            raise AnimeIdNuloError("O ID Está nulo.")
 
         if not isinstance(id, int):
-            raise Exception('ID Precisa ser um numero inteiro!!')
+            raise AnimeIdInvalidoError('ID precisa ser um Inteiro')
 
     def __identifica_campos_anime(self, dict_columns: dict) -> dict:
         """ Filtra apenas Chaves(colnas) contidos na AnimeModel.
