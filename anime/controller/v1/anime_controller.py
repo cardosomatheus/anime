@@ -49,6 +49,7 @@ async def excluir_anime_by_id(
     except Exception as error:
         print(error)
 
+
 @router.post("/editar")     # Como receber o Body?
 async def editar_anime_by_id(
     service: ServiceAnime = Depends(myservice)
@@ -59,7 +60,6 @@ async def editar_anime_by_id(
         return response
     except Exception as error:
         print(error)
-
 
 
 if __name__ == '__main__':
