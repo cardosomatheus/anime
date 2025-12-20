@@ -9,3 +9,8 @@ class AnimeIdInvalidoError(Exception):
 class AnimeIdNuloError(Exception):
     """ID Não informado"""
     pass
+
+
+class AnimeNaoEncontrado(Exception):
+    """Anime nao encnotrado"""
+    pass

@@ -2,6 +2,7 @@ from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
 from anime.exception.anime_exception import AnimeIdNuloError
 from anime.exception.anime_exception import AnimeIdInvalidoError
+from anime.exception.anime_exception import AnimeNaoEncontrado
 from datetime import date
 
 
@@ -9,14 +10,15 @@ class ServiceAnime:
     def __init__(self, repository_anime: IanimeRepository) -> None:
         self.repository_anime = repository_anime
 
-    def __valida_anime_encontrado(self, anime: dict) -> None:
-        if anime is None:
-            raise Exception('Anime não identificado.')
+    def __valida_anime_encontrado(self,
+                                  anime: dict,
+                                  ind_multiplo: int = 0) -> None:
 
-    def __valida_existencia_anime(self, id: int) -> None:
-        """ Confirma a existencia do anime pelo ID """
-        if self.repository_anime.busca_anime_by_id(id=id) is None:
-            raise Exception('Anime não encontrado.')
+        if anime is None and ind_multiplo == 0:
+            raise AnimeNaoEncontrado("Anime não Encontrado pelo ID")
+
+        elif anime is None and ind_multiplo == 1:
+            raise AnimeNaoEncontrado("Animes Não encontrados")
 
     def __valida_id_nulo_inteiro(self, id: int) -> None:
         """ Valida se o ID é nulo ou não é inteiro."""
@@ -57,48 +59,26 @@ class ServiceAnime:
             raise Exception('O nome deve ser string.')
 
     def busca_anime_by_id(self, id: int) -> dict:
-        """ Retorna a consulta do repository
-        Args:  id (int): ID do anime
-        Returns: dict: sucess and message
-        """
-
-        try:
-            self.__valida_id_nulo_inteiro(id=id)
-            byanime = self.repository_anime.busca_anime_by_id(id=id)
-            self.__valida_anime_encontrado(anime=byanime)
-
-            return byanime
-        except Exception as error:
-            print(error)
-            return {"sucess": False, "message": str(error)}
+        """ Retorna a consulta do repository"""
+        self.__valida_id_nulo_inteiro(id=id)
+        byanime = self.repository_anime.busca_anime_by_id(id=id)
+        self.__valida_anime_encontrado(anime=byanime)
+        return byanime
 
     def busca_all_animes(self) -> dict:
-        """ Retorna a consulta do repository
-        Args:  id (int): ID do anime
-        Returns: dict: sucess and message
-        """
-        try:
-            all_anime_model = self.repository_anime.busca_all_animes()
-            self.__valida_anime_encontrado(all_anime_model[0])
-            return all_anime_model
-            # return dict(all_anime_model)
-        except Exception as error:
-            print(error)
-            return {"sucess": False, "message": str(error)}
+        """ Retorna a consulta do repository"""
+        all_anime_model = self.repository_anime.busca_all_animes()
+        self.__valida_anime_encontrado(all_anime_model[0], ind_multiplo=1)
+        return all_anime_model
 
     def deleta_anime(self, id: int) -> dict:
-        """ Deleta anime pelo repository
-        Args:  id (int): ID do anime
-        Returns: dict: sucess and message
         """
-
-        try:
-            self.__valida_id_nulo_inteiro(id=id)
-            self.__valida_existencia_anime(id=id)
-            self.repository_anime.deleta_anime(id=id)
-            return {"sucess": True, "type": "Anime", "Info": "anime deletado."}
-        except Exception as error:
-            return {"sucess": False, "message": str(error)}
+        Deleta anime pelo repository
+        obs: As validações são feitas na self.busca_anime_by_id
+        """
+        self.busca_anime_by_id(id=id)
+        self.repository_anime.deleta_anime(id=id)
+        return {"sucess": True, "info": "anime deletado."}
 
     def atualiza_anime(self,
                        dict_Anime_model: dict) -> dict:
@@ -111,7 +91,6 @@ class ServiceAnime:
                 dict_columns=dict_Anime_model
             )
             self.__valida_id_nulo_inteiro(id=dict_Anime_model.get('id'))
-            self.__valida_existencia_anime(id=dict_Anime_model.get('id'))
 
             self.repository_anime.atualiza_anime(
                 dict_Anime_model=dict_Anime_model

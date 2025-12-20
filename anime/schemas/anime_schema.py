@@ -12,3 +12,8 @@ class AnimeSchema(BaseModel):
 
 class ListAnimeSchema(RootModel):
     root: List[AnimeSchema]
+
+
+class AnimeSchemaDelete(BaseModel):
+    sucess: bool
+    info: str

@@ -30,42 +30,26 @@ class RepositoryAnime(IanimeRepository):
             return new_anime_model
 
     def busca_anime_by_id(self, id: int) -> AnimeModel:
-        """ busca Anime pelo id
-        Args:
-            id (int): ID do anime
-        Returns:
-            AnimeModel: AnimeModel()
-        """
-        try:
-            with self.session as mysession:
-                query = select(AnimeModel).where(AnimeModel.id == id)
-                return mysession.execute(query).scalar_one()
-        except Exception as error:
-            print(error)
+        """ busca Anime pelo id"""
+        with self.session as mysession:
+            query = select(AnimeModel).where(AnimeModel.id == id)
+            return mysession.execute(query).scalar()
 
     def busca_all_animes(self) -> list[AnimeModel]:
-        """ busca todos os Animes
-        Returns:
-            AnimeModel: list(AnimeModel())
-        """
-        try:
-            with self.session as mysession:
-                query = select(AnimeModel)
-                return mysession.execute(query).scalars().all()
-        except Exception as error:
-            print(error)
+        """ busca todos os Animes"""
+        with self.session as mysession:
+            query = select(AnimeModel)
+            return mysession.execute(query).scalars().all()
 
     def deleta_anime(self, id: int) -> None:
-        """ Deleta o anime informado pelo ID
-            Args: id (int): ID do anime.
-        """
-        try:
-            with self.session as mysession:
+        """ Deleta o anime informado pelo ID"""
+        with self.session as mysession:
+            try:
                 query = delete(AnimeModel).where(AnimeModel.id == id)
                 mysession.execute(query)
                 mysession.commit()
-        except Exception as error:
-            print(error)
+            except Exception:
+                mysession.rollback()
 
     def atualiza_anime(self,
                        dict_Anime_model: dict) -> None:
