@@ -16,7 +16,7 @@ class ConexaoDB:
                 username=os.getenv("POSTGRES_USER"),
                 password=os.getenv("POSTGRES_PASSWORD"),
                 host="localhost",
-                port=5433,
+                port=5432,
                 database=os.getenv("POSTGRES_DB"),
             ),
             future=True,

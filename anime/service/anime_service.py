@@ -30,8 +30,9 @@ class ServiceAnime:
 
     def __identifica_campos_anime(self, dict_columns: dict) -> dict:
         return {
-            key: value for key, value in dict_columns.items()
-            if key in AnimeModel.__table__.columns.keys()
+            key: value
+            for key, value in dict_columns.items()
+            if key in AnimeModel.__table__.columns.keys() and value is not None
         }
 
     def __valida_criacao_anime(self,
@@ -81,24 +82,13 @@ class ServiceAnime:
         return {"sucess": True, "info": "anime deletado."}
 
     def atualiza_anime(self,
-                       dict_Anime_model: dict) -> dict:
+                       dict_anime: dict) -> None:
         """ Atualiza anime pelo repository
-        Args:  id (int): ID do anime
-        Returns: dict: sucess and message
+        obs: As validações são feitas na self.busca_anime_by_id
         """
-        try:
-            dict_Anime_model = self.__identifica_campos_anime(
-                dict_columns=dict_Anime_model
-            )
-            self.__valida_id_nulo_inteiro(id=dict_Anime_model.get('id'))
-
-            self.repository_anime.atualiza_anime(
-                dict_Anime_model=dict_Anime_model
-            )
-
-            return {"sucess": True, "type": "Anime", "Info": "Anime editado"}
-        except Exception as error:
-            return {"sucess": False, "message": str(error)}
+        dict_anime = self.__identifica_campos_anime(dict_columns=dict_anime)
+        self.busca_anime_by_id(id=dict_anime.get('id'))
+        self.repository_anime.atualiza_anime(dict_anime=dict_anime)
 
     def cria_anime(self,
                    nome: str,

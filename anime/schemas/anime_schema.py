@@ -6,14 +6,16 @@ from typing import List
 class AnimeSchema(BaseModel):
     id: int
     nome: str
-    data_lancamento: date
-    descricao: str
+    data_lancamento: date | None
+    descricao: str | None
 
 
 class ListAnimeSchema(RootModel):
     root: List[AnimeSchema]
 
 
-class AnimeSchemaDelete(BaseModel):
-    sucess: bool
-    info: str
+class AnimeSchemaUpdate(BaseModel):
+    id: int | None = None
+    nome: str = None
+    data_lancamento: date | None = None
+    descricao: str | None = None

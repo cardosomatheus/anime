@@ -52,21 +52,19 @@ class RepositoryAnime(IanimeRepository):
                 mysession.rollback()
 
     def atualiza_anime(self,
-                       dict_Anime_model: dict) -> None:
+                       dict_anime: dict) -> None:
         """ Atualiza O anime informado
             Args: dict_Anime_model (dict): dict com novos valores
         """
-        try:
-            with self.session as mysession:
+        with self.session as mysession:
+            try:
                 query = update(AnimeModel)\
-                        .where(AnimeModel.id == dict_Anime_model.get('id'))\
-                        .values(**dict_Anime_model)
-
-            mysession.execute(query)
-            mysession.commit()
-
-        except Exception as error:
-            print(error)
+                        .where(AnimeModel.id == dict_anime.get('id'))\
+                        .values(**dict_anime)
+                mysession.execute(query)
+                mysession.commit()
+            except Exception:
+                mysession.rollback()
 
 
 if __name__ == "__main__":

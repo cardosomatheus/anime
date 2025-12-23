@@ -1,13 +1,12 @@
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import String, Integer, Date
 from datetime import date
-
 from typing import Optional
-from anime.model.base_model import Base
 
 
-class AnimeModel(Base):
+class AnimeModel(DeclarativeBase):
     __tablename__ = "tb_anime"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nome: Mapped[str] = mapped_column(String(50))
@@ -21,11 +20,3 @@ class AnimeModel(Base):
             f"data_lancamento={self.data_lancamento} "
             f"descricao={self.descricao})"
         )
-
-    def to_dict(self) -> dict:
-        return {
-          "id": self.id,
-          "nome": self.nome,
-          "data_lancamento": self.data_lancamento,
-          "descricao": self.descricao
-        }

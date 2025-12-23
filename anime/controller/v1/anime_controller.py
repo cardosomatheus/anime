@@ -4,10 +4,10 @@ from anime.service.anime_service import ServiceAnime
 from anime.service.anime_service import AnimeIdInvalidoError
 from anime.service.anime_service import AnimeIdNuloError
 from anime.service.anime_service import AnimeNaoEncontrado
-from anime.schemas.anime_schema import AnimeSchema
-from anime.schemas.anime_schema import ListAnimeSchema
-# from anime.schemas.anime_schema import AnimeSchemaDelete
+from anime.schemas.anime_schema import AnimeSchema, ListAnimeSchema
+from anime.schemas.anime_schema import AnimeSchemaUpdate
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.encoders import jsonable_encoder
 from http import HTTPStatus
 
 router = APIRouter(prefix="/v1/animes", tags=["Animes"])
@@ -69,15 +69,14 @@ def listar_anime_by_id(id_anime: int,
 
 
 @router.delete(
-    path="/id={id_anime}",
+    path="/id={id}",
     status_code=HTTPStatus.OK
 )
-def deleta_anime_by_id(id_anime: int,
-                        # response_model=AnimeSchemaDelete,
-                        service: ServiceAnime = Depends(myservice)) -> dict:
+def deleta_anime_by_id(id: int,
+                       service: ServiceAnime = Depends(myservice)) -> dict:
     # Exclusão de anime pelo ID
     try:
-        response = service.deleta_anime(id=id_anime)
+        response = service.deleta_anime(id=id)
         return response
     except AnimeNaoEncontrado as error:
         raise HTTPException(status_code=404, detail=str(error))
@@ -92,14 +91,27 @@ def deleta_anime_by_id(id_anime: int,
         print(str(error))
 
 
-@router.post("/editar")     # Como receber o Body?
-async def editar_anime_by_id(
+@router.put(
+    "/id={id}",
+    status_code=HTTPStatus.OK
+)
+def editar_anime_by_id(
+    id: int,
+    anime: AnimeSchemaUpdate,
     service: ServiceAnime = Depends(myservice)
-) -> dict:
+) -> None:
     # Edião de anime.
     try:
-        response = service.atualiza_anime()
-        return response
+        service.atualiza_anime(dict_anime=jsonable_encoder(anime))
+    except AnimeNaoEncontrado as error:
+        raise HTTPException(status_code=404, detail=str(error))
+
+    except AnimeIdInvalidoError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+    except AnimeIdNuloError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
     except Exception as error:
         print(str(error))
 
