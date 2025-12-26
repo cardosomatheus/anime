@@ -15,7 +15,6 @@ class ListAnimeSchema(RootModel):
 
 
 class AnimeSchemaUpdate(BaseModel):
-    id: int | None = None
     nome: str = None
     data_lancamento: date | None = None
     descricao: str | None = None

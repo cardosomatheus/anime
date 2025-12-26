@@ -1,11 +1,10 @@
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
+from anime.model.base_model import Base
 from typing import Optional
 
 
-class Categoria(DeclarativeBase):
+class Categoria(Base):
     __tablename__ = "tb_categoria"
     id:        Mapped[int] = mapped_column(primary_key=True)
     nome:      Mapped[str] = mapped_column(String(50))

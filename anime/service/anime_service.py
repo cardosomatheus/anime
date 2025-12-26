@@ -34,7 +34,7 @@ class ServiceAnime:
             for key, value in dict_columns.items()
             if key in AnimeModel.__table__.columns.keys() and value is not None
         }
-
+    
     def __valida_criacao_anime(self,
                                nome: str,
                                data_lancamento: date,

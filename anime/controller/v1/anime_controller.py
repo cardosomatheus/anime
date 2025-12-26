@@ -7,7 +7,6 @@ from anime.service.anime_service import AnimeNaoEncontrado
 from anime.schemas.anime_schema import AnimeSchema, ListAnimeSchema
 from anime.schemas.anime_schema import AnimeSchemaUpdate
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
 from http import HTTPStatus
 
 router = APIRouter(prefix="/v1/animes", tags=["Animes"])
@@ -91,10 +90,7 @@ def deleta_anime_by_id(id: int,
         print(str(error))
 
 
-@router.put(
-    "/id={id}",
-    status_code=HTTPStatus.OK
-)
+@router.put("/id={id}", status_code=HTTPStatus.OK)
 def editar_anime_by_id(
     id: int,
     anime: AnimeSchemaUpdate,
@@ -102,7 +98,9 @@ def editar_anime_by_id(
 ) -> None:
     # Edião de anime.
     try:
-        service.atualiza_anime(dict_anime=jsonable_encoder(anime))
+        vbody = {'id': id, **anime.model_dump()}
+        service.atualiza_anime(dict_anime=vbody)
+        return {'message': 'Atualizado com sucesso'}
     except AnimeNaoEncontrado as error:
         raise HTTPException(status_code=404, detail=str(error))
 
@@ -117,5 +115,6 @@ def editar_anime_by_id(
 
 
 if __name__ == '__main__':
-    deleta_anime_by_id(9, myservice())
+    editar_anime_by_id(2, "{ 'nome': 'mpss', 'data_lancamento': '2025-12-26'}")
+    # deleta_anime_by_id(9, myservice())
     # print(listar_anime_by_id(11, myservice()))

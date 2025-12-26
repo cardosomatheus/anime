@@ -1,12 +1,11 @@
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import String, Integer, Date
 from datetime import date
 from typing import Optional
+from anime.model.base_model import Base
 
 
-class AnimeModel(DeclarativeBase):
+class AnimeModel(Base):
     __tablename__ = "tb_anime"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nome: Mapped[str] = mapped_column(String(50))
