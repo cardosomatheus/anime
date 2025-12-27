@@ -1,22 +1,16 @@
-from anime.db.database import ConexaoDB
-from anime.repository.anime_repository import RepositoryAnime
-from anime.service.anime_service import ServiceAnime
-from anime.service.anime_service import AnimeIdInvalidoError
-from anime.service.anime_service import AnimeIdNuloError
-from anime.service.anime_service import AnimeNaoEncontrado
-from anime.schemas.anime_schema import AnimeSchema, ListAnimeSchema
-from anime.schemas.anime_schema import AnimeSchemaUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from http import HTTPStatus
 
+from anime.controller.home import myservice, ServiceAnime
+from anime.exception.anime_exception import AnimeException
+from anime.schemas.anime_schema import (
+    AnimeSchema,
+    AnimeSchemaUpdate,
+    ListAnimeSchema
+)
+
+
 router = APIRouter(prefix="/v1/animes", tags=["Animes"])
-
-
-def myservice() -> ServiceAnime:
-    session = ConexaoDB().mysession()
-    repo = RepositoryAnime(session=session)
-    service = ServiceAnime(repository_anime=repo)
-    return service
 
 
 @router.get(
@@ -24,19 +18,16 @@ def myservice() -> ServiceAnime:
     response_model=ListAnimeSchema,
     status_code=HTTPStatus.OK
 )
-def lista_all_animes(service: ServiceAnime = Depends(myservice)) -> dict:
+def lista_all_animes(
+    service: ServiceAnime = Depends(myservice)
+) -> ListAnimeSchema:
     # Todos os animes em formato de Json
     try:
         response = service.busca_all_animes()
         return response
-    except AnimeNaoEncontrado as error:
-        raise HTTPException(status_code=404, detail=str(error))
 
-    except AnimeIdInvalidoError as error:
-        raise HTTPException(status_code=400, detail=str(error))
-
-    except AnimeIdNuloError as error:
-        raise HTTPException(status_code=400, detail=str(error))
+    except AnimeException as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error))
 
     except Exception as error:
         print(str(error))
@@ -47,21 +38,17 @@ def lista_all_animes(service: ServiceAnime = Depends(myservice)) -> dict:
     response_model=AnimeSchema,
     status_code=HTTPStatus.OK
 )
-def listar_anime_by_id(id_anime: int,
-                       service: ServiceAnime = Depends(myservice)) -> dict:
+def listar_anime_by_id(
+    id_anime: int,
+    service: ServiceAnime = Depends(myservice)
+) -> AnimeSchema:
     # Todos os animes em formato de Json
     try:
         response = service.busca_anime_by_id(id=id_anime)
         return response
 
-    except AnimeNaoEncontrado as error:
-        raise HTTPException(status_code=404, detail=str(error))
-
-    except AnimeIdInvalidoError as error:
-        raise HTTPException(status_code=400, detail=str(error))
-
-    except AnimeIdNuloError as error:
-        raise HTTPException(status_code=400, detail=str(error))
+    except AnimeException as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error))
 
     except Exception as error:
         print(str(error))
@@ -77,14 +64,9 @@ def deleta_anime_by_id(id: int,
     try:
         response = service.deleta_anime(id=id)
         return response
-    except AnimeNaoEncontrado as error:
-        raise HTTPException(status_code=404, detail=str(error))
 
-    except AnimeIdInvalidoError as error:
-        raise HTTPException(status_code=400, detail=str(error))
-
-    except AnimeIdNuloError as error:
-        raise HTTPException(status_code=400, detail=str(error))
+    except AnimeException as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error))
 
     except Exception as error:
         print(str(error))
@@ -101,14 +83,9 @@ def editar_anime_by_id(
         vbody = {'id': id, **anime.model_dump()}
         service.atualiza_anime(dict_anime=vbody)
         return {'message': 'Atualizado com sucesso'}
-    except AnimeNaoEncontrado as error:
-        raise HTTPException(status_code=404, detail=str(error))
 
-    except AnimeIdInvalidoError as error:
-        raise HTTPException(status_code=400, detail=str(error))
-
-    except AnimeIdNuloError as error:
-        raise HTTPException(status_code=400, detail=str(error))
+    except AnimeException as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error))
 
     except Exception as error:
         print(str(error))
