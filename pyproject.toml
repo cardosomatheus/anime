@@ -6,12 +6,13 @@ authors = [
     {name = "marilan",email = "cardosomcds1@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "sqlalchemy (>=2.0.44,<3.0.0)",
     "dotenv (>=0.9.9,<0.10.0)",
     "psycopg2-binary (>=2.9.11,<3.0.0)",
-    "fastapi[standard] (>=0.123.0,<0.124.0)"
+    "fastapi[standard] (>=0.128.0,<0.129.0)",
+    "python-multipart (>=0.0.21,<0.0.22)"
 ]
 
 

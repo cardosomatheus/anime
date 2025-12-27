@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String
-from anime.model.base_model import Base
+from anime.model.base import Base
 from typing import Optional
 
 
