@@ -5,8 +5,8 @@ from pwdlib import PasswordHash
 from typing import Annotated
 from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from anime.schemas.user_schema import UserSchema, UserSchemaIn
-from anime.schemas.user_schema import Token, TokenData
+from anime.dto.user_dto import UserDto, UserDtoIn
+from anime.dto.user_dto import Token, TokenData
 
 
 SECRET_KEY = "894d09f7ac3ef410502da33657b3748a8ef4238807d787c5330c01f967bc1c31"
@@ -42,7 +42,7 @@ def get_password_hash(password):
 def get_user(db, username: str):
     if username in db:
         user_dict = db[username]
-        return UserSchemaIn(**user_dict)
+        return UserDtoIn(**user_dict)
 
 
 def authenticate_user(fake_db, username: str, password: str):
@@ -87,7 +87,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
 
 async def get_current_active_user(
-    current_user: Annotated[UserSchema, Depends(get_current_user)],
+    current_user: Annotated[UserDto, Depends(get_current_user)],
 ):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -114,15 +114,15 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.get("/me", response_model=UserSchema)
+@router.get("/me", response_model=UserDto)
 async def read_users_me(
-    current_user: Annotated[UserSchema, Depends(get_current_active_user)],
+    current_user: Annotated[UserDto, Depends(get_current_active_user)],
 ):
     return current_user
 
 
 @router.get("/me/items")
 async def read_own_items(
-    current_user: Annotated[UserSchema, Depends(get_current_active_user)],
+    current_user: Annotated[UserDto, Depends(get_current_active_user)],
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]

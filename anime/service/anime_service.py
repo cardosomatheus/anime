@@ -1,4 +1,4 @@
-from anime.schemas.anime_schema import AnimeSchemaIn
+from anime.dto.anime_dto import AnimeDtoIn
 from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
 from anime.exception.anime_exception import (
@@ -68,20 +68,14 @@ class ServiceAnime:
         self.repository_anime.atualiza_anime(dict_anime=dict_anime)
 
     def cria_anime(self,
-                   dto: AnimeSchemaIn) -> dict:
+                   dto: AnimeDtoIn) -> dict:
         """Cria novo anime pelo repository"""
-        try:
-            anime_model = AnimeModel(
-                nome=dto.nome,
-                data_lancamento=dto.data_lancamento,
-                descricao=dto.descricao
-            )
+        anime_model = AnimeModel(
+            nome=dto.nome,
+            data_lancamento=dto.data_lancamento,
+            descricao=dto.descricao
+        )
 
-            self.repository_anime.cria_anime(anime=anime_model)
-            return {
-                    "sucess": True,
-                    "type": "Anime",
-                    "Info": f"Anime {dto.nome} cadastrado com sucesso."
-                    }
-        except Exception as error:
-            return {"sucess": False, "message": str(error)}
+        self.repository_anime.cria_anime(anime=anime_model)
+        return {"sucess": True,
+                "Info": f"Anime {dto.nome} cadastrado com sucesso."}

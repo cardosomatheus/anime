@@ -14,7 +14,8 @@ class RepositoryAnime(IanimeRepository):
                 mysession.add(anime)
                 mysession.commit()
                 mysession.refresh(anime)
-            except Exception:
+            except Exception as error:
+                print(str(error))
                 mysession.rollback()
 
     def busca_anime_by_id(self, id: int) -> AnimeModel:
@@ -41,9 +42,7 @@ class RepositoryAnime(IanimeRepository):
 
     def atualiza_anime(self,
                        dict_anime: dict) -> None:
-        """ Atualiza O anime informado
-            Args: dict_Anime_model (dict): dict com novos valores
-        """
+        """ Atualiza O anime informado"""
         with self.session as mysession:
             try:
                 query = update(AnimeModel)\
