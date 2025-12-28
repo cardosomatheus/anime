@@ -5,8 +5,17 @@ class UserSchema(BaseModel):
     username: str
     email: str
     full_name: str | None = None
-    disable: bool | None = None
+    disabled: bool | None = None
 
 
 class UserSchemaIn(UserSchema):
     hashed_password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None

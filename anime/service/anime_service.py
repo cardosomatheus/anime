@@ -1,9 +1,10 @@
+from anime.schemas.anime_schema import AnimeSchemaIn
 from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
-from anime.exception.anime_exception import AnimeIdNuloError
-from anime.exception.anime_exception import AnimeIdInvalidoError
-from anime.exception.anime_exception import AnimeNaoEncontrado
-from datetime import date
+from anime.exception.anime_exception import (
+    AnimeIdNuloError,
+    AnimeIdInvalidoError,
+    AnimeNaoEncontrado)
 
 
 class ServiceAnime:
@@ -34,30 +35,6 @@ class ServiceAnime:
             for key, value in dict_columns.items()
             if key in AnimeModel.__table__.columns.keys() and value is not None
         }
-    
-    def __valida_criacao_anime(self,
-                               nome: str,
-                               data_lancamento: date,
-                               descricao: str) -> None:
-        """Validações simples para criar um anime.
-        Args:
-            nome (str): nome
-            data_lancamento (date): data de lançamento
-            descricao (str): descricao
-        Raises:
-            Exception: data_lancamento é um date?
-            Exception: nome é um str?
-            Exception: descricao é um str?
-        """
-
-        if not isinstance(data_lancamento, date):
-            raise Exception('A data incorreta.')
-
-        if not isinstance(nome, str):
-            raise Exception('O nome deve ser string.')
-
-        if descricao is not None and not isinstance(descricao, str):
-            raise Exception('O nome deve ser string.')
 
     def busca_anime_by_id(self, id: int) -> dict:
         """ Retorna a consulta do repository"""
@@ -91,33 +68,20 @@ class ServiceAnime:
         self.repository_anime.atualiza_anime(dict_anime=dict_anime)
 
     def cria_anime(self,
-                   nome: str,
-                   data_lancamento: date,
-                   descricao: str) -> dict:
-        """Cria novo anime pelo repository
-        Args:
-            nome (str): nome
-            data_lancamento (date): data lançamento
-            descricao (str): descricao
-        Returns: dict: sucess and message
-        """
+                   dto: AnimeSchemaIn) -> dict:
+        """Cria novo anime pelo repository"""
         try:
-            self.__valida_criacao_anime(
-                nome=nome,
-                data_lancamento=data_lancamento,
-                descricao=descricao
+            anime_model = AnimeModel(
+                nome=dto.nome,
+                data_lancamento=dto.data_lancamento,
+                descricao=dto.descricao
             )
 
-            new_anime = self.repository_anime.cria_anime(
-                nome=nome,
-                data_lancamento=data_lancamento,
-                descricao=descricao
-                )
-
+            self.repository_anime.cria_anime(anime=anime_model)
             return {
                     "sucess": True,
                     "type": "Anime",
-                    "Info": f"Anime {new_anime.nome} cadastrado com sucesso."
+                    "Info": f"Anime {dto.nome} cadastrado com sucesso."
                     }
         except Exception as error:
             return {"sucess": False, "message": str(error)}

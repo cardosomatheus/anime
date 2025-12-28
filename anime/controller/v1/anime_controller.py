@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from anime.controller.home import myservice, ServiceAnime
 from anime.exception.anime_exception import AnimeException
 from anime.schemas.anime_schema import (
-    AnimeSchema,
-    AnimeSchemaUpdate,
-    ListAnimeSchema
+    AnimeSchemaIn,
+    AnimeSchemaOut,
+    ListAnimeSchemaOut
 )
 
 
@@ -14,12 +14,12 @@ router = APIRouter(prefix="/v1/animes", tags=["Animes"])
 
 @router.get(
     path="/",
-    response_model=ListAnimeSchema,
+    response_model=ListAnimeSchemaOut,
     status_code=status.HTTP_200_OK
 )
 def lista_all_animes(
     service: ServiceAnime = Depends(myservice)
-) -> ListAnimeSchema:
+) -> ListAnimeSchemaOut:
     # Todos os animes em formato de Json
     try:
         response = service.busca_all_animes()
@@ -34,13 +34,13 @@ def lista_all_animes(
 
 @router.get(
     "/id={id_anime}",
-    response_model=AnimeSchema,
+    response_model=AnimeSchemaOut,
     status_code=status.HTTP_200_OK
 )
-def listar_anime_by_id(
+def lista_anime_by_id(
     id_anime: int,
     service: ServiceAnime = Depends(myservice),
-) -> AnimeSchema:
+) -> AnimeSchemaOut:
     # Todos os animes em formato de Json
     try:
         response = service.busca_anime_by_id(id=id_anime)
@@ -71,9 +71,9 @@ def deleta_anime_by_id(id: int,
 
 
 @router.put("/id={id}", status_code=status.HTTP_200_OK)
-def editar_anime_by_id(
+def atualiza_anime_by_id(
     id: int,
-    anime: AnimeSchemaUpdate,
+    anime: AnimeSchemaIn,
     service: ServiceAnime = Depends(myservice)
 ) -> None:
     # Edião de anime.
@@ -87,3 +87,22 @@ def editar_anime_by_id(
 
     except Exception as error:
         print(str(error))
+
+
+@router.post(
+    path='/',
+    status_code=status.HTTP_201_CREATED
+)
+def cria_anime(
+    anime: AnimeSchemaIn,
+    service: ServiceAnime = Depends(myservice)
+):
+    # Criação de anime.
+    try:
+        service.cria_anime(dto=anime)
+    except AnimeException as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error))
+
+    except Exception as error:
+        print(str(error))
+
