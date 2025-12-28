@@ -77,5 +77,7 @@ class ServiceAnime:
         )
 
         self.repository_anime.cria_anime(anime=anime_model)
-        return {"sucess": True,
-                "Info": f"Anime {dto.nome} cadastrado com sucesso."}
+        return {
+            "sucess": True,
+            "Info": f"Anime {dto.nome} cadastrado com sucesso."
+        }

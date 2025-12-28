@@ -1,7 +1,9 @@
 from sqlalchemy import select, delete, update
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from anime.interface.anime_interface import IanimeRepository
 from anime.model.anime_model import AnimeModel
+from anime.exception.anime_exception import AnimeRepositoryUnique
 
 
 class RepositoryAnime(IanimeRepository):
@@ -14,9 +16,18 @@ class RepositoryAnime(IanimeRepository):
                 mysession.add(anime)
                 mysession.commit()
                 mysession.refresh(anime)
-            except Exception as error:
-                print(str(error))
+
+            except IntegrityError as error:
                 mysession.rollback()
+                if 'errors.UniqueViolation' in str(error.args):
+                    raise AnimeRepositoryUnique(
+                        
+                        "Anime já existe.")
+                raise Exception(str(error)
+                                )
+            except Exception as error:
+                mysession.rollback()
+                raise Exception(str(error))
 
     def busca_anime_by_id(self, id: int) -> AnimeModel:
         """ busca Anime pelo id"""

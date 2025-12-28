@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-
 from anime.controller.home import myservice, ServiceAnime
 from anime.exception.anime_exception import AnimeException
 from anime.dto.anime_dto import (
@@ -99,8 +98,8 @@ def cria_anime(
 ) -> dict:
     # Criação de anime.
     try:
-        service.cria_anime(dto=anime)
-        return {'Message': True}
+        response = service.cria_anime(dto=anime)
+        return response
     except AnimeException as error:
         raise HTTPException(status_code=error.status_code, detail=str(error))
 
@@ -108,3 +107,12 @@ def cria_anime(
         raise HTTPException(status_code=400, detail=str(error))
 
 
+if __name__ == "__main__":
+    from datetime import date
+    animes = AnimeDtoIn(
+      nome="string",
+      data_lancamento=date(year=2020, month=5, day=10),
+      descricao='string'
+    )
+
+    cria_anime(anime=animes, service=myservice())

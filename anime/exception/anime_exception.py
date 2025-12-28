@@ -18,3 +18,8 @@ class AnimeIdNuloError(AnimeException):
 
 class AnimeNaoEncontrado(AnimeException):
     status_code = 404
+
+
+class AnimeRepositoryUnique(AnimeException):
+    "Usada no repository"
+    status_code = 409
