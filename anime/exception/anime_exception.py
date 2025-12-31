@@ -21,5 +21,4 @@ class AnimeNaoEncontrado(AnimeException):
 
 
 class AnimeRepositoryUnique(AnimeException):
-    "Usada no repository"
     status_code = 409

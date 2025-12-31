@@ -1,4 +1,4 @@
-from pydantic import BaseModel, RootModel
+from pydantic import BaseModel, RootModel, ConfigDict
 from datetime import date
 from typing import List
 
@@ -10,6 +10,8 @@ class AnimeDtoIn(BaseModel):
 
 
 class AnimeDtoOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     nome: str
     data_lancamento: date | None

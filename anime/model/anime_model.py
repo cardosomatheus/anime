@@ -19,3 +19,6 @@ class AnimeModel(Base):
             f"data_lancamento={self.data_lancamento} "
             f"descricao={self.descricao})"
         )
+
+    def to_dict(self):
+        return {i.name: getattr(self, i.name) for i in self.__mapper__.columns}

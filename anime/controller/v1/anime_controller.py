@@ -54,14 +54,14 @@ def lista_anime_by_id(
 
 @router.delete(
     path="/id={id}",
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_200_OK
 )
 def deleta_anime_by_id(id: int,
                        service: ServiceAnime = Depends(myservice)) -> None:
     # Exclusão de anime pelo ID
     try:
-        service.deleta_anime(id=id)
-
+        response = service.deleta_anime(id=id)
+        return response
     except AnimeException as error:
         raise HTTPException(status_code=error.status_code, detail=str(error))
 
@@ -75,11 +75,11 @@ def atualiza_anime_by_id(
     anime: AnimeDtoIn,
     service: ServiceAnime = Depends(myservice)
 ) -> None:
-    # Edião de anime.
+    # Edição de anime.
     try:
-        vbody = {'id': id, **anime.model_dump()}
-        service.atualiza_anime(dict_anime=vbody)
-        return {'message': 'Atualizado com sucesso'}
+        vdto = AnimeDtoOut(id=id, **anime.model_dump())
+        response = service.atualiza_anime(dto=vdto)
+        return response
 
     except AnimeException as error:
         raise HTTPException(status_code=error.status_code, detail=str(error))
