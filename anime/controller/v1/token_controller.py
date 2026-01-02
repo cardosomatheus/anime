@@ -3,7 +3,7 @@ from typing import Annotated
 from pwdlib import PasswordHash
 from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from anime.dto.login_dto import TokenDtoOut
+from anime.dto.token_dto import TokenDtoOut
 from datetime import timedelta, datetime, timezone
 
 SECRET_KEY = "1bacd7fea1893fd493fa7059e7c29a6182cfecf81ad9748e6a93aea6a96a8314"
