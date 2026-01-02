@@ -12,7 +12,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 my_db_user = {
     "matheus": {
         "username": "matheus",
-        "password": "$argon2id$v=19$m=65536,t=3,p=4$ukifqXDBk7RAEpIQk1TdUw$VCah/R55h0uQ8Wt5o3wGt7/XDzCZ/NVd5B5/VJ2p5JU"
+        "password": ("$argon2id$v=19$m=65536,t=3,p=4$ukifqXDBk7RAEpIQk1Td",
+                     "Uw$VCah/R55h0uQ8Wt5o3wGt7/XDzCZ/NVd5B5/VJ2p5JU")
     }
 }
 
