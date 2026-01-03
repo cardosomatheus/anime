@@ -3,7 +3,8 @@ from anime.model.usuario_model import UsuarioModel
 from anime.exception.usuario_exception import UsuarioRepositoryUnique
 
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timezone
+from sqlalchemy import select
+from typing import List
 
 
 class UsuarioRepository:
@@ -28,12 +29,34 @@ class UsuarioRepository:
                 mysession.rollback()
                 raise Exception(str(error))
 
+    def busca_usuario_by_id(self, id: int) -> UsuarioModel:
+        """Busca Usuario pelo ID"""
+        with self.session as mysession:
+            try:
+                query = select(UsuarioModel).\
+                        where(UsuarioModel.id == id)
+                return mysession.execute(query).scalar_one_or_none()
+            except Exception as error:
+                raise Exception(str(error))
 
+    def busca_all_usuarios(self) -> List[UsuarioModel]:
+        """ Busca todos os Usuarios"""
+        with self.session as mysession:
+            try:
+                query = select(UsuarioModel)
+                return mysession.execute(query).scalars().all()
+            except Exception as error:
+                raise Exception(str(error))
+
+ 
 if __name__ == "__main__":
     repo = UsuarioRepository(ConexaoDB().mysession())
-    usuario = UsuarioModel(
-        nome='matsheus',
-        password="mcds123",
-        criado=datetime.now(timezone.utc),
-        ind_admin=True)
-    repo.criar_usuario(usuario=usuario)
+    print('ois')
+    print(repo.busca_all_usuarios())
+    # print(repo.busca_usuario_by_id(id=1))
+    # usuario = UsuarioModel(
+    #   nome='marilan',
+    #    password="mcds123",
+    #    criado=datetime.now(timezone.utc),
+    #    ind_admin=True)
+    # repo.criar_usuario(usuario=usuario)
