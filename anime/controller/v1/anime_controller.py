@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from anime.dto.token_dto import TokenDtoOut
 from anime.controller.home import myservice, ServiceAnime
-from anime.controller.v1.token_controller import login_for_access_token
 from anime.exception.anime_exception import AnimeException
 from anime.dto.anime_dto import (
     AnimeDtoIn,
@@ -19,8 +17,7 @@ router = APIRouter(prefix="/v1/animes", tags=["Animes"])
     status_code=status.HTTP_200_OK
 )
 def lista_all_animes(
-    service: ServiceAnime = Depends(myservice),
-    token: TokenDtoOut = Depends(login_for_access_token)
+    service: ServiceAnime = Depends(myservice)
 ) -> ListAnimeDtoOut:
     # Todos os animes em formato de Json
     try:
@@ -41,8 +38,7 @@ def lista_all_animes(
 )
 def lista_anime_by_id(
     id_anime: int,
-    service: ServiceAnime = Depends(myservice),
-    token: TokenDtoOut = Depends(login_for_access_token)
+    service: ServiceAnime = Depends(myservice)
 ) -> AnimeDtoOut:
     # Todos os animes em formato de Json
     try:
@@ -62,8 +58,7 @@ def lista_anime_by_id(
 )
 def deleta_anime_by_id(
     id: int,
-    service: ServiceAnime = Depends(myservice),
-    token: TokenDtoOut = Depends(login_for_access_token)
+    service: ServiceAnime = Depends(myservice)
 ) -> None:
     # Exclusão de anime pelo ID
     try:
@@ -80,8 +75,7 @@ def deleta_anime_by_id(
 def atualiza_anime_by_id(
     id: int,
     anime: AnimeDtoIn,
-    service: ServiceAnime = Depends(myservice),
-    token: TokenDtoOut = Depends(login_for_access_token)
+    service: ServiceAnime = Depends(myservice)
 ) -> None:
     # Edição de anime.
     try:

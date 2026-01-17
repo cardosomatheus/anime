@@ -3,7 +3,8 @@ from anime.model.usuario_model import UsuarioModel
 from anime.dto.usuario_dto import (
     UsuarioDtoIn,
     UsuarioDtoOut,
-    ListUsuarioDtoOut
+    ListUsuarioDtoOut,
+    UsuarioValidaTokenDtoOut
 )
 
 
@@ -42,6 +43,25 @@ class UsuarioService:
         )
         return response
 
+    def _busca_usuario_by_nome(
+        self,
+        dto: UsuarioValidaTokenDtoOut
+    ) -> UsuarioValidaTokenDtoOut:
+        """ Valida se existe um usuario com mesmo nome e senha"""        
+
+        user_auth = UsuarioModel(nome=dto.username, password=dto.password_hash)
+        # Busca o usuario
+        response = self.repository._busca_usuario_by_nome_e_senha(user_auth)
+
+        if response is None:
+            return None
+
+        # Gera o DTO UsuarioValidaTokenDtoOut
+        return UsuarioValidaTokenDtoOut(
+            username=response.nome,
+            password_hash=response.password
+        )
+
 
 if __name__ == "__main__":
     from anime.db.database import ConexaoDB
@@ -49,5 +69,3 @@ if __name__ == "__main__":
 
     repo = UsuarioRepository(ConexaoDB().mysession())
     service = UsuarioService(repository=repo)
-    print(service.busca_usuario_by_id(1))
-    print(service.busca_all_usuarios())

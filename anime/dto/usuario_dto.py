@@ -16,3 +16,9 @@ class UsuarioDtoIn(UsuarioDtoOut):
 
 class ListUsuarioDtoOut(RootModel):
     root: List[UsuarioDtoOut]
+
+
+class UsuarioValidaTokenDtoOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    username: str
+    password_hash: str | None = None

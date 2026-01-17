@@ -48,7 +48,20 @@ class UsuarioRepository:
             except Exception as error:
                 raise Exception(str(error))
 
- 
+    def _busca_usuario_by_nome_e_senha(self,
+                                       usuario: UsuarioModel) -> UsuarioModel:
+        """Busca nome e senha do Usuario pelo ID
+           para validar a permissão do Token
+        """
+        with self.session as mysession:
+            try:
+                query = select(UsuarioModel).\
+                        where(UsuarioModel.nome == usuario.nome)
+                return mysession.execute(query).scalar_one_or_none()
+            except Exception as error:
+                raise Exception(str(error))
+
+
 if __name__ == "__main__":
     repo = UsuarioRepository(ConexaoDB().mysession())
     print('ois')

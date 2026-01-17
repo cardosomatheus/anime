@@ -14,3 +14,7 @@ class IusuarioRepository(ABC):
     @abstractmethod
     def busca_all_usuarios(self):
         pass
+
+    @abstractmethod
+    def _busca_usuario_by_nome_e_senha(self):
+        pass

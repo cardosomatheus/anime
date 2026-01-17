@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from anime.controller.v1.token_controller import get_current_user
 from anime.controller.v1 import (
     anime_controller,
     token_controller,
@@ -7,6 +8,14 @@ from anime.controller.v1 import (
 
 app = FastAPI()
 
-app.include_router(anime_controller.router)
-app.include_router(usuario_controller.router)
 app.include_router(token_controller.router)
+
+app.include_router(
+    router=anime_controller.router,
+    dependencies=[Depends(get_current_user)]
+)
+
+app.include_router(
+    router=usuario_controller.router,
+    dependencies=[Depends(get_current_user)]
+)
