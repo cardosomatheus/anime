@@ -1,6 +1,7 @@
 from builtins import Exception
 
 
+# Exeptions criados para usuarios
 class UsuarioException(Exception):
     status = 400
 

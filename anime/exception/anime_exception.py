@@ -1,6 +1,7 @@
 from builtins import Exception
 
 
+# Exeptions criados para animes
 class AnimeException(Exception):
     status_code = 400
 

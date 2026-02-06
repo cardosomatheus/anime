@@ -8,18 +8,25 @@ from anime.dto.usuario_dto import UsuarioValidaTokenDtoOut
 from datetime import timedelta, datetime, timezone
 from anime.controller.home import myservice_usuario
 
-SECRET_KEY = "1bacd7fea1893fd493fa7059e7c29a6182cfecf81ad9748e6a93aea6a96a8314"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from dotenv import load_dotenv
+import os
 
 
+# Carrega variaveis via .env
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
+
+# Configura a rota e padrão hash da senha
 ppassword_hash = PasswordHash.recommended()
 router = APIRouter(prefix='/v1/token', tags=['token'])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/token")
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
-    """Valida o token atual do usuario"""
+    # Faz a busca do usuario e valida seu token
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token inválido ou expirado",
@@ -38,7 +45,8 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 def create_access_token(username: str, expires_delta: timedelta | None = None):
-    """Criação do token de acesso"""
+    # Cria o token de acesso com o tempo de expiração informado.
+    # Retorna um TokenDtoOut com o token gerado e seu type bearer
     if expires_delta is None:
         expires_delta = ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -53,7 +61,7 @@ def create_access_token(username: str, expires_delta: timedelta | None = None):
 
 
 def autenticate_user(username: str, passoword: str):
-    """ Autenticacao do usurio e senha"""
+    # Faz a autenticacao da senha e a senha hash salva no banco
     dto = UsuarioValidaTokenDtoOut(
         username=username,
         password_hash=None
@@ -87,10 +95,3 @@ async def login_for_access_token(
         username=form_data.username,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
-
-
-if __name__ == '__main__':
-    print(autenticate_user(
-       username='admin',
-       hash_password='minhasenha123'
-    ))

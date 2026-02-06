@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 
+# Interface de animes
 class IanimeRepository(ABC):
 
     @abstractmethod

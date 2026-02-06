@@ -9,6 +9,7 @@ import os
 class ConexaoDB:
     load_dotenv()
 
+    # Gera uma sessão do banco sempre que for chamada.
     def mysession(self) -> Session:
         engine = create_engine(
             URL.create(
@@ -16,7 +17,7 @@ class ConexaoDB:
                 username=os.getenv("POSTGRES_USER"),
                 password=os.getenv("POSTGRES_PASSWORD"),
                 host="localhost",
-                port=5432,
+                port=os.getenv("DB_PORTA"),
                 database=os.getenv("POSTGRES_DB"),
             ),
             future=True,

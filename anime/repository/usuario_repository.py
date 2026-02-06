@@ -1,4 +1,4 @@
-from anime.db.database import Session, ConexaoDB
+from anime.db.database import Session
 from anime.model.usuario_model import UsuarioModel
 from anime.exception.usuario_exception import UsuarioRepositoryUnique
 
@@ -60,16 +60,3 @@ class UsuarioRepository:
                 return mysession.execute(query).scalar_one_or_none()
             except Exception as error:
                 raise Exception(str(error))
-
-
-if __name__ == "__main__":
-    repo = UsuarioRepository(ConexaoDB().mysession())
-    print('ois')
-    print(repo.busca_all_usuarios())
-    # print(repo.busca_usuario_by_id(id=1))
-    # usuario = UsuarioModel(
-    #   nome='marilan',
-    #    password="mcds123",
-    #    criado=datetime.now(timezone.utc),
-    #    ind_admin=True)
-    # repo.criar_usuario(usuario=usuario)
