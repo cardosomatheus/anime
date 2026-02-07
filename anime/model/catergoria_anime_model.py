@@ -3,7 +3,7 @@ from sqlalchemy import Integer
 from anime.model.base import Base
 
 
-class AnimeModel(Base):
+class CategoriaAnimeModel(Base):
     __tablename__ = "tb_categoria_anime"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     id_anime: Mapped[int] = mapped_column(Integer)
