@@ -1,9 +1,18 @@
 from fastapi import APIRouter, status, Depends, HTTPException
-from anime.controller.home import myservice_usuario, UsuarioService
 from anime.dto.usuario_dto import UsuarioDtoOut, UsuarioDtoIn
 from anime.dto.token_dto import TokenDtoOut
 from anime.exception.usuario_exception import UsuarioException
 from anime.controller.v1.token_controller import login_for_access_token
+from anime.db.database import ConexaoDB
+from anime.repository.usuario_repository import UsuarioRepository
+from anime.service.usuario_service import UsuarioService
+
+
+def myservice():
+    session = ConexaoDB().mysession()
+    repo = UsuarioRepository(session=session)
+    service = UsuarioService(repository=repo)
+    return service
 
 
 router = APIRouter(prefix='/v1/usuario', tags=['usuarios'])
@@ -12,7 +21,7 @@ router = APIRouter(prefix='/v1/usuario', tags=['usuarios'])
 @router.post(path='/',  status_code=status.HTTP_201_CREATED)
 def cria_usuario(
     usuario: UsuarioDtoIn,
-    service: UsuarioService = Depends(myservice_usuario),
+    service: UsuarioService = Depends(myservice),
     token: TokenDtoOut = Depends(login_for_access_token)
 ) -> dict:
     # Criação de usuario.
@@ -31,7 +40,7 @@ def cria_usuario(
             status_code=status.HTTP_200_OK)
 def lista_usuario_by_id(
     id: int,
-    service: UsuarioService = Depends(myservice_usuario),
+    service: UsuarioService = Depends(myservice),
     token: TokenDtoOut = Depends(login_for_access_token)
 ) -> UsuarioDtoOut:
     # Busca Usuario pelo ID
