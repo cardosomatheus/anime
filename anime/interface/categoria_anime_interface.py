@@ -11,3 +11,7 @@ class IcategoriaAnimeRepository(ABC):
     @abstractmethod
     def remove_categoria_anime(self):
         pass
+
+    @abstractmethod
+    def busca_all_categorias(self):
+        pass

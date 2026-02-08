@@ -8,3 +8,4 @@ class CategoriaAnimeModel(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     id_anime: Mapped[int] = mapped_column(Integer)
     id_categoria: Mapped[int] = mapped_column(Integer)
+

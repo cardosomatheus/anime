@@ -56,9 +56,9 @@ class ServiceAnime:
 
     def busca_all_animes(self) -> ListAnimeDtoOut:
         """ Retorna a consulta do repository"""
-        dto_all_anime = self.repository_anime.busca_all_animes()
-        self.__valida_anime_encontrado(dto_all_anime[0], ind_multiplo=1)
-        return ListAnimeDtoOut.model_validate(dto_all_anime)
+        all_anime = self.repository_anime.busca_all_animes()
+        self.__valida_anime_encontrado(all_anime[0], ind_multiplo=1)
+        return ListAnimeDtoOut.model_validate(all_anime)
 
     def __valida_id_nulo_inteiro(self, id: int) -> None:
         """ Valida se o ID é nulo ou não é inteiro."""

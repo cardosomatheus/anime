@@ -1,12 +1,20 @@
 from anime.db.database import Session
 from anime.model.catergoria_anime_model import CategoriaAnimeModel
-from sqlalchemy import text
+from anime.model.categoria_model import Categoria_model
+from sqlalchemy import text, select
+from sqlalchemy.exc import SQLAlchemyError
 
 
-class CatergoriaAnime:
+class CatergoriaAnimeRepository:
 
     def __init__(self, session: Session):
-        self.sesssion = session
+        self.session = session
+
+    def busca_all_categorias(self) -> list[Categoria_model]:
+        """ busca todos os Animes"""
+        with self.session as mysession:
+            query = select(Categoria_model)
+            return mysession.execute(query).scalars().all()
 
     def vincula_categoria_anime(
         self,
@@ -21,12 +29,21 @@ class CatergoriaAnime:
         query = text("call proc_vinc_anime_categoria(:idAnime, :idCategoria)")
 
         try:
-            with self.sesssion as mysession:
+            with self.session as mysession:
                 mysession.execute(statement=query, params=params)
                 mysession.commit()
-        except Exception as e:
+        except SQLAlchemyError as error:
+            if hasattr(error.orig, 'pgcode'):
+                message = error.orig.diag.message_primary
+            else:
+                mysession.rollback()
+                message = "Ocorreu um erro inesperado no banco de dados."
+
+            raise Exception(message)
+
+        except Exception as error:
             mysession.rollback()
-            raise Exception(e)
+            raise Exception(error)
 
     def remove_categoria_anime(
             self,
@@ -41,23 +58,18 @@ class CatergoriaAnime:
         query = text("call proc_rem_anime_categoria(:idAnime, :idCategoria)")
 
         try:
-            with self.sesssion as mysession:
+            with self.session as mysession:
                 mysession.execute(statement=query, params=params)
                 mysession.commit()
+        except SQLAlchemyError as error:
+            if hasattr(error.orig, 'pgcode'):
+                message = error.orig.diag.message_primary
+            else:
+                mysession.rollback()
+                message = "Ocorreu um erro inesperado no banco de dados."
+
+            raise Exception(message)
+
         except Exception as e:
             mysession.rollback()
             raise Exception(e)
-
-
-if __name__ == '__main__':
-    from anime.db.database import ConexaoDB
-
-    sessao = ConexaoDB().mysession()
-    repo = CatergoriaAnime(session=sessao)
-    modelo = CategoriaAnimeModel(
-        id_anime=2,
-        id_categoria=3
-    )
-
-    # print(repo.vincula_categoria_anime(modelo))
-    # print(repo.remove_categoria_anime(modelo))

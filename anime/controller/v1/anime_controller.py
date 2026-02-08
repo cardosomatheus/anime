@@ -1,11 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from anime.controller.home import myservice, ServiceAnime
+from anime.repository.anime_repository import RepositoryAnime
+from anime.db.database import ConexaoDB
+from anime.service.anime_service import ServiceAnime
 from anime.exception.anime_exception import AnimeException
 from anime.dto.anime_dto import (
     AnimeDtoIn,
     AnimeDtoOut,
     ListAnimeDtoOut
 )
+
+
+def myservice() -> ServiceAnime:
+    session = ConexaoDB().mysession()
+    repo = RepositoryAnime(session=session)
+    service = ServiceAnime(repository_anime=repo)
+    return service
 
 
 router = APIRouter(prefix="/v1/animes", tags=["Animes"])
