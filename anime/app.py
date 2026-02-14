@@ -7,6 +7,8 @@ from anime.controller.v1 import (
     categoria_anime_controller
 )
 
+# Inicializa a API
+
 app = FastAPI()
 
 app.include_router(token_controller.router)

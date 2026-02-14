@@ -1,3 +1,4 @@
+# Subindo o .env para o Git para facilitar a copia.
 
-.env
+# .env
 __pycache__/
