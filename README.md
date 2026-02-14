@@ -60,3 +60,6 @@ password: minhasenha123
 
 Clique em autorizar.
 Pronto, todos os endpoints estão disponiveis para uso.
+
+
+![endpoints](imagem_endpoints.pngg)
