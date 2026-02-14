@@ -14,9 +14,4 @@ CREATE TABLE TB_EPISODIO(
     CONSTRAINT FK_EPISODIO_ANIME FOREIGN KEY (ID_ANIME) REFERENCES PUBLIC.TB_ANIME (ID)    
 );
 
-COMMIT;
- 
-
--- !!!!!Criar gatilho que calcula os minutos e segundos a cada alteracao em SEGUNDOS!!!!!
-
 

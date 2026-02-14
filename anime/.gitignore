@@ -2,3 +2,7 @@
 
 # .env
 __pycache__/
+
+
+# docker run -d --name teste1 -p 80:80 mypythonteste
+# docker build -t mypythonteste -f ./anime/dockerfile.api .

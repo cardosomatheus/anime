@@ -1,0 +1,26 @@
+# Imagem python 3.10
+FROM python:3.10
+
+ENV POETRY_VIRTUALENVS_CREATE=false
+ENV POETRY_HOME="/opt/poetry"
+ENV PATH="/opt/poetry/bin:$PATH"
+
+
+# local de trabalho
+WORKDIR /code
+
+# Instala poetry no docker
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# copia as libs do projeto guardadas via poetry.
+COPY pyproject.toml poetry.lock* /code/
+
+
+# Instala libs poetry apenas suas dependêcias.
+RUN poetry install --no-root
+
+# copia o projeto
+COPY ./anime /code/anime
+
+# Executa o projeto
+CMD ["fastapi", "run", "anime/app.py", "--port", "8000"]

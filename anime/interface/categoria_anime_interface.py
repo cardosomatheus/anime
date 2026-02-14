@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-# Interface de animes
+# Interface de Categoria
 class IcategoriaAnimeRepository(ABC):
 
     @abstractmethod
