@@ -61,4 +61,4 @@ password: minhasenha123
 Clique em autorizar.
 Pronto, todos os endpoints estão disponiveis para uso.
 
-<img src="imagem_endpoints.pngg" alt="endpoints do Projeto" width="200">
+
