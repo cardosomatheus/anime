@@ -11,6 +11,7 @@ Uma API moderna construída com **FastAPI** para gerenciamento ou consulta de in
 * **[Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)**: Containerização da aplicação.
 * **[Uvicorn](https://www.uvicorn.org/)**: Servidor ASGI para produção e desenvolvimento.
 
+```bash
 .
 ├── anime
 │   ├── controller          # Controladore / endpoints 
@@ -31,6 +32,7 @@ Uma API moderna construída com **FastAPI** para gerenciamento ou consulta de in
 ├── poetry.lock         
 ├── pyproject.toml
 └── README.md
+```
 
 ## 🚀 Como Executar o Projeto
 
@@ -44,7 +46,7 @@ No terminal, dentro da pasta raiz do projeto, execute o seguinte comando:
 
 ```bash
 docker compose up -d
-
+```
 
 # Acesse o swagger da api em execução
 http://0.0.0.0:8000/docs
@@ -54,7 +56,7 @@ Clique no canto superior a direita em "Authorize." e preencha os seginte campos.
 ```bash
 username: admin
 password: minhasenha123
+```
 
 Clique em autorizar.
-
 Pronto, todos os endpoints estão disponiveis para uso.
