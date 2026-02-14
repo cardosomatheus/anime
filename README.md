@@ -2,6 +2,7 @@
 
 Uma API moderna construída com **FastAPI** para gerenciamento ou consulta de informações sobre animes. O projeto utiliza **Poetry** para gerenciamento de dependências e **Docker** para facilitar o desenvolvimento e deploy.
 
+
 ## 🛠️ Tecnologias Utilizadas
 
 * **[Python 3.10+](https://www.python.org/)**
@@ -11,19 +12,49 @@ Uma API moderna construída com **FastAPI** para gerenciamento ou consulta de in
 * **[Uvicorn](https://www.uvicorn.org/)**: Servidor ASGI para produção e desenvolvimento.
 
 .
-├── anime/              # Código fonte da aplicação
-│   ├── app.py          # Ponto de entrada da API
-│   └── ...             # Rotas, modelos e lógica
-├── pyproject.toml      # Configurações do Poetry e dependências
-├── Dockerfile          # Configuração da imagem Docker
-└── README.md           # Documentação
+├── anime
+│   ├── controller          # Controladore / endpoints 
+│   ├── db                  # Conexão com o banco
+│   ├── docker_database     # Script de inicialização do banco.
+│   ├── dto                 # DTOs.
+│   ├── exception           # Exceções configuradas.
+│   ├── interface           # Interfaces.
+│   ├── model               # Modelos das tabelas.    
+│   ├── repository          # repository (CRUD).
+│   ├── service             # service (camada de serviço.)
+│   ├── .env                # Variaveis de ambiente.
+│   ├── .gitignore          # gitignore              
+│   └── app.py              # Inicialização da API.
+├── docker-compose.yml      # Inicialização dos containers.
+├── Dockerfile.api          # Dockerfile da api.
+├── Dockerfile.db           # Dockerfile do BD.
+├── poetry.lock         
+├── pyproject.toml
+└── README.md
 
 ## 🚀 Como Executar o Projeto
 
+Siga os passos abaixo para configurar o ambiente e testar a API localmente.
+
+### 1. Pré-requisitos
+Certifique-se de ter o [Docker](https://www.docker.com/) instalado em sua máquina.
+
+### 2. Subindo a Aplicação
+No terminal, dentro da pasta raiz do projeto, execute o seguinte comando:
+
+```bash
+docker compose up -d
 
 
-username=os.getenv("POSTGRES_USER"),
-password=os.getenv("POSTGRES_PASSWORD"),
-host="localhost",
-port=5433,
-database=os.getenv("POSTGRES_DB"),
+# Acesse o swagger da api em execução
+http://0.0.0.0:8000/docs
+
+Clique no canto superior a direita em "Authorize." e preencha os seginte campos.
+
+```bash
+username: admin
+password: minhasenha123
+
+Clique em autorizar.
+
+Pronto, todos os endpoints estão disponiveis para uso.

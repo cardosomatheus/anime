@@ -62,10 +62,3 @@ class UsuarioService:
             password_hash=response.password
         )
 
-
-if __name__ == "__main__":
-    from anime.db.database import ConexaoDB
-    from anime.repository.usuario_repository import UsuarioRepository
-
-    repo = UsuarioRepository(ConexaoDB().mysession())
-    service = UsuarioService(repository=repo)
