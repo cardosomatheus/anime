@@ -16,7 +16,7 @@ class ConexaoDB:
                 "postgresql+psycopg2",
                 username=os.getenv("POSTGRES_USER"),
                 password=os.getenv("POSTGRES_PASSWORD"),
-                host="localhost",
+                host="db",
                 port=os.getenv("DB_PORTA"),
                 database=os.getenv("POSTGRES_DB"),
             ),
